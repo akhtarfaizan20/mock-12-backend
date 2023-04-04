@@ -42,9 +42,16 @@ const loginUser = async (req, res) => {
         if (err) {
           res.status(400).send({ err: "Error is bcrypt" });
         } else {
-          const token = jwt.sign({ _id: user[0]._id }, process.env.JWT_SECRET);
+          if (result) {
+            const token = jwt.sign(
+              { _id: user[0]._id },
+              process.env.JWT_SECRET
+            );
 
-          res.send({ token });
+            res.send({ token });
+          } else {
+            res.status(400).send({ err: "Password did not matched" });
+          }
         }
       });
     } else {
